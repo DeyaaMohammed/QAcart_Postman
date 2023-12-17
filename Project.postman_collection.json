@@ -1,0 +1,631 @@
+{
+	"info": {
+		"_postman_id": "915420fb-3174-4125-a970-a0ecf2366111",
+		"name": "7. Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30627003"
+	},
+	"item": [
+		{
+			"name": "1. Build our E2E test cases",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"var token = jsonData.accessToken;\r",
+									"\r",
+									"pm.environment.set(\"token\", token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"deyaa.mohammed@qacart.com\",\r\n    \"password\": \"Test123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/signin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonFile = pm.response.json()\r",
+									"var courseID = jsonFile.id\r",
+									"\r",
+									"pm.environment.set(\"courseID\", courseID);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Java\",\r\n    \"description\": \"Full Java course from zero in Arabic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/660/courses",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses"
+							]
+						},
+						"description": "To add a new course for QA cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check that the API response code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "Get a specific course by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Selenium\",\r\n    \"description\": \"Full Selenium course from zero in Arabic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "To edit a specific course"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Javascript\",\r\n    \"description\": \"Full Javascript course from zero in Arabic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "bla bla"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check that the API response code is 200\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "Get a specific course by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Courses",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/660/courses",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses"
+							]
+						},
+						"description": "bal"
+					},
+					"response": []
+				},
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"deyaa.mohammed@qacart.com\",\r\n    \"password\": \"Test123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Run our E2E test cases",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"var token = jsonData.accessToken;\r",
+									"\r",
+									"pm.environment.set(\"token\", token);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"deyaa.mohammed@qacart.com\",\r\n    \"password\": \"Test123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/signin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonFile = pm.response.json()\r",
+									"var courseID = jsonFile.id\r",
+									"\r",
+									"pm.environment.set(\"courseID\", courseID);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Java\",\r\n    \"description\": \"Full Java course from zero in Arabic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/660/courses",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses"
+							]
+						},
+						"description": "To add a new course for QA cart"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check that the API response code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "Get a specific course by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Selenium\",\r\n    \"description\": \"Full Selenium course from zero in Arabic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "To edit a specific course"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Course",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Javascript\",\r\n    \"description\": \"Full Javascript course from zero in Arabic\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "bla bla"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Course after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check that the API response code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/660/courses/{{courseID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"660",
+								"courses",
+								"{{courseID}}"
+							]
+						},
+						"description": "Get a specific course by ID"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
